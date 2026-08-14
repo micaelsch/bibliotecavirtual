@@ -3,32 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:#1c2321; font-family:'Ubuntu', -apple-system, sans-serif; }
+        .caixa { background:#efe3c8; padding:36px 32px; border-radius:3px; border-top:5px solid #6b4a30; border-bottom:5px solid #6b4a30; box-shadow:2px 3px 10px rgba(0,0,0,0.4); width:280px; }
+        h1 { font-family:Georgia, 'Iowan Old Style', serif; color:#211c16; margin:0 0 24px; text-align:center; }
+        label { display:block; margin-top:16px; font-size:13px; color:#5c5346; }
+        input { width:100%; padding:8px; margin-top:4px; border:1px solid #c2b28a; border-radius:3px; background:#faf6ea; box-sizing:border-box; font-family:'Ubuntu', sans-serif; }
+        button { width:100%; margin-top:24px; padding:10px; background:#a8763a; color:#faf6ea; border:none; border-radius:3px; font-family:'Ubuntu', sans-serif; font-weight:500; cursor:pointer; transition:background 0.2s ease; }
+        button:hover { background:#8f6530; }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
 
-<form id="form-login">
-    <label for="email">E-mail</label>
-    <input type="email" id="email" name="email" required>
+<div class="caixa">
+    <h1>Minha estante</h1>
+    <form id="form-login">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required>
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required>
+        <button type="submit">Entrar</button>
+    </form>
+</div>
 
-    <label for="senha">Senha</label>
-    <input type="password" id="senha" name="senha" required>
-
-    <button type="submit">Entrar</button>
-</form>
 <script>
     document.getElementById('form-login').addEventListener('submit', async function (evento) {
         evento.preventDefault();
-
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
-
         const credenciais = btoa(email + ':' + senha);
 
         const resposta = await fetch('http://localhost:8080/livros', {
-            headers: {
-                'Authorization': 'Basic ' + credenciais
-            }
+            headers: { 'Authorization': 'Basic ' + credenciais }
         });
 
         if (resposta.ok) {
@@ -40,5 +49,6 @@
         }
     });
 </script>
+
 </body>
 </html>
