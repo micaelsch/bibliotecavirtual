@@ -31,9 +31,9 @@ public class LivroController {
     }
 
     @GetMapping("/{id}")
-    public Livro buscarPorId(@PathVariable Long id) {
-        return livroService.buscarPorId(id);
-    }
+public Livro buscarPorId(@PathVariable Long id, Authentication authentication) {
+    return livroService.buscarPorId(id, authentication.getName());
+}
 
     @PostMapping
     public Livro salvar(@RequestBody Livro livro, Authentication authentication) {
@@ -41,7 +41,7 @@ public class LivroController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        livroService.deletar(id);
-    }
+    public void deletar(@PathVariable Long id, Authentication authentication) {
+    livroService.deletar(id, authentication.getName());
+}
 }

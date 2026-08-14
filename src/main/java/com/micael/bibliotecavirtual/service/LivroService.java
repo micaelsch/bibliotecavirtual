@@ -1,9 +1,10 @@
 package com.micael.bibliotecavirtual.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.micael.bibliotecavirtual.model.Livro;
 import com.micael.bibliotecavirtual.model.Usuario;
@@ -28,9 +29,15 @@ public class LivroService {
         return livroRepository.findByUsuarioEmailAndCategoriaId(email, categoriaId);
     }
 
-    public Livro buscarPorId(Long id) {
-        Optional<Livro> livro = livroRepository.findById(id);
-        return livro.orElse(null);
+    public Livro buscarPorId(Long id, String email) {
+        Livro livro = livroRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+
+        if (!livro.getUsuario().getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esse livro não pertence a você");
+        }
+
+        return livro;
     }
 
     public Livro salvar(Livro livro, String emailUsuario) {
@@ -39,7 +46,8 @@ public class LivroService {
         return livroRepository.save(livro);
     }
 
-    public void deletar(Long id) {
+    public void deletar(Long id, String email) {
+        buscarPorId(id, email);
         livroRepository.deleteById(id);
     }
 }

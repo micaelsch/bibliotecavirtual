@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+
+<form id="form-login">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" name="senha" required>
+
+    <button type="submit">Entrar</button>
+</form>
+<script>
+    document.getElementById('form-login').addEventListener('submit', async function (evento) {
+        evento.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+
+        const credenciais = btoa(email + ':' + senha);
+
+        const resposta = await fetch('http://localhost:8080/livros', {
+            headers: {
+                'Authorization': 'Basic ' + credenciais
+            }
+        });
+
+        if (resposta.ok) {
+            sessionStorage.setItem('email', email);
+            sessionStorage.setItem('senha', senha);
+            window.location.href = 'estante.html';
+        } else {
+            alert('E-mail ou senha incorretos.');
+        }
+    });
+</script>
+</body>
+</html>

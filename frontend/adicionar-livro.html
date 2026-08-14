@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar livro</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        label { display: block; margin-top: 1rem; }
+        input, select { padding: 0.5rem; width: 250px; }
+        button { margin-top: 1.5rem; padding: 0.5rem 1rem; }
+    </style>
+</head>
+<body>
+
+<h1>Adicionar livro</h1>
+
+<form id="form-livro">
+    <label for="titulo">Título</label>
+    <input type="text" id="titulo" required>
+
+    <label for="autor">Autor</label>
+    <input type="text" id="autor" required>
+
+    <label for="categoria">Categoria</label>
+    <select id="categoria" required>
+    <option value="" selected disabled>Selecione</option>
+    </select>
+
+    <button type="submit">Salvar</button>
+</form>
+
+<script>
+    const email = sessionStorage.getItem('email');
+    const senha = sessionStorage.getItem('senha');
+    const credenciais = btoa(email + ':' + senha);
+
+    async function carregarCategorias() {
+        const resposta = await fetch('http://localhost:8080/categorias', {
+            headers: { 'Authorization': 'Basic ' + credenciais }
+        });
+        const categorias = await resposta.json();
+
+        const select = document.getElementById('categoria');
+        categorias.forEach(categoria => {
+            const opcao = document.createElement('option');
+            opcao.value = categoria.id;
+            opcao.textContent = categoria.nome;
+            select.appendChild(opcao);
+        });
+    }
+
+    document.getElementById('form-livro').addEventListener('submit', async function (evento) {
+        evento.preventDefault();
+
+        const livro = {
+            titulo: document.getElementById('titulo').value,
+            autor: document.getElementById('autor').value,
+            categoria: { id: document.getElementById('categoria').value }
+        };
+
+        const resposta = await fetch('http://localhost:8080/livros', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic ' + credenciais,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(livro)
+        });
+
+        if (resposta.ok) {
+            window.location.href = 'estante.html';
+        } else {
+            alert('Erro ao salvar o livro.');
+        }
+    });
+
+    carregarCategorias();
+</script>
+
+</body>
+</html>
