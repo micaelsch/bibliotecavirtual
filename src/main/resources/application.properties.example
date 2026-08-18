@@ -1,7 +1,7 @@
 spring.application.name=bibliotecavirtual
 spring.datasource.url=jdbc:postgresql://localhost:5432/bibliotecavirtual
 spring.datasource.username=postgres
-spring.datasource.password=mic@ws2909
+spring.datasource.password=SUA_SENHA_AQUI
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
